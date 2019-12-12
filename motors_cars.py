@@ -45,6 +45,19 @@ class carsWith2Motor:
         self.motorRight.backward()
         self.motorLeft.backward()
 
+	def getStandartCar():
+		pinsLeft = motor_pins(23,24,25)
+		pinsRight = motor_pins(22,27,26)
+
+		GPIO.setmode(GPIO.BCM)
+
+		theSpeeds = motor_speeds(50,4,1)
+		motorRight = motors.fromPinDefs(pinsRight, theSpeeds)
+		motorLeft = motors.fromPinDefs(pinsLeft, theSpeeds)
+
+		myCar = carsWith2Motor(motorRight, motorLeft)
+		
+		return myCar
 
 #def carTest():
 pinsLeft = motor_pins(23,24,25)
