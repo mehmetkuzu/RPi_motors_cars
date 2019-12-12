@@ -9,7 +9,8 @@ from socketserver import StreamRequestHandler
 from socketserver import BaseRequestHandler
 from socketserver import TCPServer
 from datetime import datetime
-import carsWith2Motor
+from motors_cars import carsWith2Motor
+from motors_cars import getStandartCar
 
 class CommandProcessor:
     @abc.abstractmethod 
@@ -25,6 +26,7 @@ class sampleCommandProcessor(CommandProcessor):
 
 class CarCommanderRequestHandler(StreamRequestHandler):
     def handle(self):
+        global myCar
         a = "r"
         while a != "q" and a!= "k":
             a = self.request.recv(1)
@@ -53,6 +55,9 @@ class CarCommanderRequestHandler(StreamRequestHandler):
 
 
         if a=="k":
+            myCar.stop()
+            GPIO.cleanup()
+
             self.connection.close()
             def kill_me_please(server):
                 server.shutdown()
@@ -65,7 +70,9 @@ class CarCommanderRequestHandler(StreamRequestHandler):
         # now = datetime.now()
         # current_time = now.strftime("%H:%M:%S")
         # print(current_time + " | " + message)
-
+    def DefineTheCar():
+        global myCar
+        myCar = getStandartCar()
         
 class ThreadedTCPRequestHandlerSample(BaseRequestHandler):
     # def setup(self):
@@ -96,13 +103,11 @@ class ThreadedTCPRequestHandlerSample(BaseRequestHandler):
 class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     pass
     
-myCar = carsWith2Motor.getStandartCar()
 
 def runTheServer(): 
     # Port 0 means to select an arbitrary unused port
     HOST, PORT = "localhost", 1701
-    
-
+    CarCommanderRequestHandler.DefineTheCar()
     #server = TCPServer((HOST, PORT), ThreadedTCPRequestHandlerSample)
     server = TCPServer((HOST, PORT), CarCommanderRequestHandler)
     try:
