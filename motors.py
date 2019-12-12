@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+#Buradan deneme
 class motor_speeds:
     # Motorların hız tanımları için kaç kademe vs. PWM için
     def __init__(self, lowLimitToRun, numberOfGears, turningGearDif):
