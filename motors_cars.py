@@ -1,4 +1,3 @@
-import keyboard  # using module keyboard
 import RPi.GPIO as GPIO
 from time import sleep
 
