@@ -1,7 +1,7 @@
 import keyboard  # using module keyboard
 import RPi.GPIO as GPIO
 from time import sleep
-
+#For RPi robotings
 
 class motor_speeds:
     # Motorların hız tanımları için kaç kademe vs. PWM için
