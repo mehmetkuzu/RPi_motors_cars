@@ -68,5 +68,4 @@ class motors:
             self.currentGear = 1
         else:
             self.currentGear = gear
-
         self.p.changeDutyCycle(self.speedDef.gearSpeed(self.currentGear))
