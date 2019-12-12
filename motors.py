@@ -1,5 +1,11 @@
 import RPi.GPIO as GPIO
 
+class motor_pins:
+        def __init__(self, in1, in2, en):
+                self.in1 = in1
+                self.in2 = in2
+                self.en = en
+                
 class motor_speeds:
     # Motorların hız tanımları için kaç kademe vs. PWM için
     def __init__(self, lowLimitToRun, numberOfGears, turningGearDif):
@@ -20,16 +26,21 @@ class motor_speeds:
             return self.lowLimitToRun + ((gear - 1) * self.gearSteps)
 
 
-class motors:
+class motors:    
     def __init__(self, in1, in2, en, speedDef: motor_speeds):
         self.in1 = in1
         self.in2 = in2
-        self.en = en
+        self.en = en      
+
         self.temp = 1
-        self.speedDef = speedDef
+        self.speedDef:speedDef = speedDef
         self.currentGear = 1
         self.direction = 1
         self.stopped = True
+        
+    @classmethod
+    def fromPinDefs (self, pins:motor_pins, speedDef:motor_speeds):
+        return self(pins.in1,pins.in2,pins.en,speedDef)
 
     def forward(self):
         GPIO.output(self.in1, GPIO.HIGH)
@@ -46,8 +57,10 @@ class motors:
     def stop(self):
         GPIO.output(self.in1, GPIO.LOW)
         GPIO.output(self.in2, GPIO.LOW)
-        self.stopped = True
         self.currentGear = 1
+        self.direction = 1
+        self.changeGear(self.currentGear)
+        self.stopped = True        
 
     def motorSet(self):
         GPIO.setup(self.in1, GPIO.OUT)
@@ -57,7 +70,6 @@ class motors:
         GPIO.output(self.in2, GPIO.LOW)
         self.p = GPIO.PWM(self.en, 1000)
         self.p.start(self.speedDef.gearSpeed(self.currentGear))
-        
 
     def changeGear(self, gear):
         if self.stopped:
@@ -68,4 +80,4 @@ class motors:
             self.currentGear = 1
         else:
             self.currentGear = gear
-        self.p.changeDutyCycle(self.speedDef.gearSpeed(self.currentGear))
+        self.p.ChangeDutyCycle(self.speedDef.gearSpeed(self.currentGear))
