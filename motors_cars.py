@@ -2,6 +2,8 @@ import keyboard  # using module keyboard
 import RPi.GPIO as GPIO
 from time import sleep
 #For RPi robotings
+#Git denemesi de bedava
+
 
 class motor_speeds:
     # Motorların hız tanımları için kaç kademe vs. PWM için
