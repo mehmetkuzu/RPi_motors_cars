@@ -57,6 +57,7 @@ class motors:
         GPIO.output(self.in2, GPIO.LOW)
         self.p = GPIO.PWM(self.en, 1000)
         self.p.start(self.speedDef.gearSpeed(self.currentGear))
+        
 
     def changeGear(self, gear):
         if self.stopped:

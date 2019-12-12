@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+import motors
 from time import sleep
 #Motor tanımları buradan çıkartıldı.
 class carsWith2Motor:
@@ -9,7 +10,7 @@ class carsWith2Motor:
         self.angle = 0  # -1 sola bir vites fazla +sağa bir vites fazla
         self.gear = 1
         self.stopped = True
-
+		
     def turnRight(self, stepMore):
         pass
 
