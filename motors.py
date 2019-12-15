@@ -16,8 +16,7 @@ class motor_speeds:
 
     def gearSpeed(self, gear):
         if gear > self.numberOfGears:
-            # exception handling eklenecek şimdilik en üst vitese al
-            pass
+                return 100
         elif gear == self.numberOfGears:
             return 100
         elif gear < 1:
@@ -81,3 +80,16 @@ class motors:
         else:
             self.currentGear = gear
         self.p.ChangeDutyCycle(self.speedDef.gearSpeed(self.currentGear))
+    
+    def gearUp(self,up):
+            self.changeGear(self.currentGear+up)
+            
+    def gearDown(self,down):
+            self.changeGear(self.currentGear-down)
+            
+    def isMaxGear(self):
+            return not(self.currentGear < self.speedDef.gearSteps)
+            
+    def isMinGear(self):
+            return (self.currentGear == 1)
+                    

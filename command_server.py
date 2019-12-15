@@ -11,6 +11,12 @@ from socketserver import TCPServer
 from datetime import datetime
 from motors_cars import carsWith2Motor
 from motors_cars import getStandartCar
+from laser import laser
+from laser import getStandartLaser
+from buzzer import buzzer
+from buzzer import getStandartBuzzer
+
+import RPi.GPIO as GPIO
 
 class CommandProcessor:
     @abc.abstractmethod 
@@ -27,6 +33,8 @@ class sampleCommandProcessor(CommandProcessor):
 class CarCommanderRequestHandler(StreamRequestHandler):
     def handle(self):
         global myCar
+        global myLaser
+        global myBuzzer
         a = "r"
         while a != "q" and a!= "k":
             a = self.request.recv(1)
@@ -42,11 +50,24 @@ class CarCommanderRequestHandler(StreamRequestHandler):
                 elif a == "b":
                     myCar.backward()
                 elif a == "r":
-                    myCar.turnRight(1)
+                    myCar.turnRight()
                 elif a == "l":
-                    myCar.turnLeft(1)
+                    myCar.turnLeft()
+                elif a == "+":
+                    myCar.gearUp(1)
+                elif a== "-":
+                    myCar.gearDown(1)
                 elif a == "s":
                     myCar.stop()
+                elif a == "t":
+                    myLaser.turnOff()
+                elif a == "T":
+                    myLaser.turnOn()
+                elif a == "/":
+                    myBuzzer.turnOff()
+                elif a == "*":
+                    myBuzzer.turnOn()
+
                 else:
                   pass
             else:
@@ -73,6 +94,14 @@ class CarCommanderRequestHandler(StreamRequestHandler):
     def DefineTheCar():
         global myCar
         myCar = getStandartCar()
+    
+    def DefineTheLaser():
+        global myLaser
+        myLaser = getStandartLaser()
+        
+    def DefineTheBuzzer():
+        global myBuzzer
+        myBuzzer = getStandartBuzzer()
         
 class ThreadedTCPRequestHandlerSample(BaseRequestHandler):
     # def setup(self):
@@ -105,9 +134,12 @@ class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     
 
 def runTheServer(): 
+    GPIO.setmode(GPIO.BCM)
     # Port 0 means to select an arbitrary unused port
-    HOST, PORT = "localhost", 1701
+    HOST, PORT = "192.168.0.105", 1700
     CarCommanderRequestHandler.DefineTheCar()
+    CarCommanderRequestHandler.DefineTheLaser()
+    CarCommanderRequestHandler.DefineTheBuzzer()
     #server = TCPServer((HOST, PORT), ThreadedTCPRequestHandlerSample)
     server = TCPServer((HOST, PORT), CarCommanderRequestHandler)
     try:

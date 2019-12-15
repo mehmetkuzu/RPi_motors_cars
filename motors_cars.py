@@ -15,14 +15,23 @@ class carsWith2Motor:
         self.motorLeft.motorSet()
         self.stopped = True
         
-    def turnRight(self, stepMore):
-        if self.motorLeft.currentGear < self.motorLeft.speedDef.numberOfGears:
-            self.motorLeft.changeGear(self.motorLeft.currentGear + stepMore)
+    def turnRight(self):
+        if self.motorLeft.isMaxGear():
+            if self.motorRight.isMinGear():
+                return
+            else:
+                self.motorRight.gearDown(1)
+        else:
+           self.motorLeft.gearUp(1) 
         
-
-    def turnLeft(self, stepMore):
-        if self.motorRight.currentGear < self.motorRight.speedDef.numberOfGears:
-            self.motorRight.changeGear(self.motorRight.currentGear + stepMore)
+    def turnLeft(self):
+        if self.motorRight.isMaxGear():
+            if self.motorLeft.isMinGear():
+                return
+            else:
+                self.motorLeft.gearDown(1)
+        else:
+           self.motorRight.gearUp(1) 
 
     def stop(self):
         self.motorRight.stop()
@@ -33,6 +42,13 @@ class carsWith2Motor:
         self.motorRight.changeGear(gear)
         self.motorLeft.changeGear(gear)
         self.gear = gear
+    def gearUp(self,up):
+        self.motorRight.gearUp(up)
+        self.motorLeft.gearUp(up)
+
+    def gearDown(self,down):
+        self.motorRight.gearDown(down)
+        self.motorLeft.gearDown(down)
         
 
     def forward(self):
@@ -49,9 +65,7 @@ def getStandartCar():
     pinsLeft = motor_pins(23,24,25)
     pinsRight = motor_pins(22,27,26)
 
-    GPIO.setmode(GPIO.BCM)
-
-    theSpeeds = motor_speeds(50,4,1)
+    theSpeeds = motor_speeds(30,4,1)
     motorRight = motors.fromPinDefs(pinsRight, theSpeeds)
     motorLeft = motors.fromPinDefs(pinsLeft, theSpeeds)
 
