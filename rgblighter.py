@@ -21,10 +21,75 @@
 #  MA 02110-1301, USA.
 #  
 #  
+import RPi.GPIO as GPIO
+from random import randint
+import time
+import _thread
+import threading
 
-
-def main(args):
-    return 0
+class showThread(threading.Thread):
+   def __init__(self,showLight):
+      threading.Thread.__init__(self)
+      self.showLight:rgblighter = showLight
+   def run(self):
+       self.showLight.doTheShow()
+       
+class rgblighter:
+        def __init__(self, rPin,gPin,bPin):
+            self.rPin = rPin
+            self.gPin = gPin
+            self.bPin = bPin
+            self.rgblighterSet()
+        def rgblighterSet(self):
+            GPIO.setup(self.rPin, GPIO.OUT)
+            GPIO.output(self.rPin, GPIO.LOW)
+            GPIO.setup(self.gPin, GPIO.OUT)
+            GPIO.output(self.gPin, GPIO.LOW)
+            GPIO.setup(self.bPin, GPIO.OUT)
+            GPIO.output(self.bPin, GPIO.LOW)
+            self.pR = GPIO.PWM(self.rPin, 1000)
+            self.pG = GPIO.PWM(self.gPin, 1000)
+            self.pB = GPIO.PWM(self.bPin, 1000)
+            self.pR.start(100)
+            self.pG.start(100)
+            self.pB.start(100)
+        def turnOn(self):
+            GPIO.output(self.rPin, GPIO.HIGH)
+            GPIO.output(self.gPin, GPIO.HIGH)
+            GPIO.output(self.bPin, GPIO.HIGH)
+        def turnOff(self):
+            GPIO.output(self.rPin, GPIO.LOW)
+            GPIO.output(self.gPin, GPIO.LOW)
+            GPIO.output(self.bPin, GPIO.LOW)
+            
+        def doTheShowOnThread(self):
+            global aThreadRunning
+            breakpoint()
+            try:
+                aThreadRunning
+                if aThreadRunning.isAlive():
+                    return
+                else:
+                    aThreadRunning.join()
+                    del aThreadRunning
+            except NameError:
+                pass
+            aThreadRunning = showThread(self)
+            aThreadRunning.start()
+                        
+        def doTheShow(self):
+            self.turnOn()
+            iShow = 100
+            while iShow > 0:
+                self.pR.ChangeDutyCycle(randint(0,100))
+                self.pG.ChangeDutyCycle(randint(0,100))
+                self.pB.ChangeDutyCycle(randint(0,100))
+                time.sleep(0.10)
+                iShow = iShow - 1
+            
+def getStandartrgblighter():
+    myrgblighter = rgblighter(13,6,5)
+    return myrgblighter
 
 if __name__ == '__main__':
     import sys

@@ -1,3 +1,4 @@
+import sys
 import socket 
 import socketserver
 import abc
@@ -15,6 +16,10 @@ from laser import laser
 from laser import getStandartLaser
 from buzzer import buzzer
 from buzzer import getStandartBuzzer
+from rgblighter import rgblighter
+from rgblighter import getStandartrgblighter
+
+
 
 import RPi.GPIO as GPIO
 
@@ -35,6 +40,7 @@ class CarCommanderRequestHandler(StreamRequestHandler):
         global myCar
         global myLaser
         global myBuzzer
+        global myRGBLighter
         a = "r"
         while a != "q" and a!= "k":
             a = self.request.recv(1)
@@ -67,7 +73,8 @@ class CarCommanderRequestHandler(StreamRequestHandler):
                     myBuzzer.turnOff()
                 elif a == "*":
                     myBuzzer.turnOn()
-
+                elif a == ".":
+                    myRGBLighter.doTheShowOnThread()                
                 else:
                   pass
             else:
@@ -102,6 +109,15 @@ class CarCommanderRequestHandler(StreamRequestHandler):
     def DefineTheBuzzer():
         global myBuzzer
         myBuzzer = getStandartBuzzer()
+
+    def DefineTheBuzzer():
+        global myBuzzer
+        myBuzzer = getStandartBuzzer()
+        
+    def DefineTheRGBLighter():
+        global myRGBLighter
+        myRGBLighter = getStandartrgblighter()
+        
         
 class ThreadedTCPRequestHandlerSample(BaseRequestHandler):
     # def setup(self):
@@ -140,6 +156,7 @@ def runTheServer():
     CarCommanderRequestHandler.DefineTheCar()
     CarCommanderRequestHandler.DefineTheLaser()
     CarCommanderRequestHandler.DefineTheBuzzer()
+    CarCommanderRequestHandler.DefineTheRGBLighter()
     #server = TCPServer((HOST, PORT), ThreadedTCPRequestHandlerSample)
     server = TCPServer((HOST, PORT), CarCommanderRequestHandler)
     try:
@@ -149,5 +166,6 @@ def runTheServer():
     except KeyboardInterrupt:
         server.shutdown()
     server.server_close()
+    sys.exit(0)
 if __name__ == "__main__":
     runTheServer()
