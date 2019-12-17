@@ -18,7 +18,8 @@ from buzzer import buzzer
 from buzzer import getStandartBuzzer
 from rgblighter import rgblighter
 from rgblighter import getStandartrgblighter
-
+from distanceCheck import distanceCheck
+from distanceCheck import getStandartDistanceChecker
 
 
 import RPi.GPIO as GPIO
@@ -41,6 +42,8 @@ class CarCommanderRequestHandler(StreamRequestHandler):
         global myLaser
         global myBuzzer
         global myRGBLighter
+        global myDistanceChecker
+        
         a = "r"
         while a != "q" and a!= "k":
             a = self.request.recv(1)
@@ -75,6 +78,10 @@ class CarCommanderRequestHandler(StreamRequestHandler):
                     myBuzzer.turnOn()
                 elif a == ".":
                     myRGBLighter.doTheShowOnThread()                
+                elif a == "c":
+                    myDistanceChecker.doTheCheckOnThread()
+                elif a == "C":
+                    myDistanceChecker.showPinContinous()
                 else:
                   pass
             else:
@@ -84,7 +91,6 @@ class CarCommanderRequestHandler(StreamRequestHandler):
 
         if a=="k":
             myCar.stop()
-            GPIO.cleanup()
 
             self.connection.close()
             def kill_me_please(server):
@@ -118,6 +124,10 @@ class CarCommanderRequestHandler(StreamRequestHandler):
         global myRGBLighter
         myRGBLighter = getStandartrgblighter()
         
+    def DefineTheDistanceChecker():
+        global myDistanceChecker
+        global myCar
+        myDistanceChecker = getStandartDistanceChecker(myCar)
         
 class ThreadedTCPRequestHandlerSample(BaseRequestHandler):
     # def setup(self):
@@ -157,6 +167,7 @@ def runTheServer():
     CarCommanderRequestHandler.DefineTheLaser()
     CarCommanderRequestHandler.DefineTheBuzzer()
     CarCommanderRequestHandler.DefineTheRGBLighter()
+    CarCommanderRequestHandler.DefineTheDistanceChecker()
     #server = TCPServer((HOST, PORT), ThreadedTCPRequestHandlerSample)
     server = TCPServer((HOST, PORT), CarCommanderRequestHandler)
     try:
@@ -165,6 +176,7 @@ def runTheServer():
         server.serve_forever()
     except KeyboardInterrupt:
         server.shutdown()
+    GPIO.cleanup()
     server.server_close()
     sys.exit(0)
 if __name__ == "__main__":

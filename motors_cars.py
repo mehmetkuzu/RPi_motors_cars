@@ -60,6 +60,7 @@ class carsWith2Motor:
         self.changeGear(self.gear)
         self.motorRight.backward()
         self.motorLeft.backward()
+        
 
 def getStandartCar():
     pinsLeft = motor_pins(23,24,25)
