@@ -81,7 +81,7 @@ class CarCommanderRequestHandler(StreamRequestHandler):
                 elif a == "c":
                     myDistanceChecker.doTheCheckOnThread()
                 elif a == "C":
-                    myDistanceChecker.showPinContinous()
+                    myDistanceChecker.stopTheCheckThread()
                 else:
                   pass
             else:
@@ -171,6 +171,7 @@ def runTheServer():
     #server = TCPServer((HOST, PORT), ThreadedTCPRequestHandlerSample)
     server = TCPServer((HOST, PORT), CarCommanderRequestHandler)
     try:
+        socketserver.TCPServer.allow_reuse_address = True
         server.allow_reuse_address = True
         server.timeout = 20
         server.serve_forever()

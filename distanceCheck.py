@@ -37,11 +37,16 @@ class checkDistanceThread(threading.Thread):
       
    def run(self):
        while True:
+           if leaveTheThread:
+               break
            if self.distanceChecker.checkIfClose():
-               print("Car too close")
-               self.relatedCar.stop()
+               #print("Car too close")
+               #self.relatedCar.stop()
+               self.relatedCar.forward()
            else:
-                print("OK")
+               pass
+                #print("OK")
+                
        #self.showLight.doTheShow()
        
 class distanceCheck:
@@ -58,7 +63,7 @@ class distanceCheck:
             
         def doTheCheckOnThread(self):
             global aThreadRunning
-            breakpoint()
+            global leaveTheThread
             try:
                 aThreadRunning
                 if aThreadRunning.isAlive():
@@ -69,7 +74,13 @@ class distanceCheck:
             except NameError:
                 pass
             aThreadRunning = checkDistanceThread(self,self.relatedCar)
+            leaveTheThread = False
             aThreadRunning.start()
+
+        def stopTheCheckThread(self):
+            global leaveTheThread
+            leaveTheThread = True
+        
         def showPinContinous(self):
             while True:
                 if self.checkIfClose():
