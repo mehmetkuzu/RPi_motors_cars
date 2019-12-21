@@ -1,4 +1,5 @@
 import RPi.GPIO as GPIO
+from speedSensor import speedSensor
 
 class motor_pins:
         def __init__(self, in1, in2, en):
@@ -92,4 +93,16 @@ class motors:
             
     def isMinGear(self):
             return (self.currentGear == 1)
-                    
+            
+    def setSpeedSensor(self,spS):
+		self.spS = spS
+		
+	def startSpeedSensor(self):
+		if self.spS:
+			self.spS.turnOnDetector()
+	def getSensorSpeed(self):
+		if self.spS:
+			self.spS.calculate_speed()
+	def getSensorSpeedInWindow(self):
+		if self.spS:
+			self.spS.calculate_speed_inwindow()

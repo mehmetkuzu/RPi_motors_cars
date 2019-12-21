@@ -82,6 +82,10 @@ class CarCommanderRequestHandler(StreamRequestHandler):
                     myDistanceChecker.doTheCheckOnThread()
                 elif a == "C":
                     myDistanceChecker.stopTheCheckThread()
+                elif a == "?":
+                    if myCar.motorRight.spS:
+                        print (myCar.motorRight.spS.calculate_speed())
+                        print (myCar.motorRight.spS.calculate_speed_inwindow()
                 else:
                   pass
             else:

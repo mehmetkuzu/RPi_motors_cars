@@ -3,6 +3,7 @@ from motors import motors
 from motors import motor_speeds
 from motors import motor_pins
 from time import sleep
+from speedSensor import speedSensor
 #Motor tanımları buradan çıkartıldı.
 class carsWith2Motor:
     def __init__(self, motorRight: motors, motorLeft: motors):
@@ -69,6 +70,12 @@ def getStandartCar():
     theSpeeds = motor_speeds(30,4,1)
     motorRight = motors.fromPinDefs(pinsRight, theSpeeds)
     motorLeft = motors.fromPinDefs(pinsLeft, theSpeeds)
+    
+    speedSonsorRight = speedSensor(25,1,20,5)
+    motorRight.setSpeedSensor(speedSensorRight)
+    
+    #speedSonsorLeft = speedSensor(25,1,20,5)
+    #motorLeft.setSpeedSensor(speedSensorLeft)
 
     myCar = carsWith2Motor(motorRight, motorLeft)
     
