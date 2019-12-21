@@ -63,8 +63,8 @@ class carsWith2Motor:
         
 
 def getStandartCar():
-    pinsLeft = motor_pins(23,24,25)
-    pinsRight = motor_pins(22,27,26)
+    pinsLeft = motor_pins(17,18,23)
+    pinsRight = motor_pins(22,27,24)
 
     theSpeeds = motor_speeds(30,4,1)
     motorRight = motors.fromPinDefs(pinsRight, theSpeeds)
@@ -75,8 +75,9 @@ def getStandartCar():
     return myCar
 
 def carTest():
-    pinsLeft = motor_pins(23,24,25)
-    pinsRight = motor_pins(22,27,26)
+    #pinsLeft = motor_pins(23,24,25)
+    pinsLeft = motor_pins(17,18,23)
+    pinsRight = motor_pins(22,27,24)
     # MOTOR1IN2 = 24
     # MOTOR1IN1 = 23
     # MOTOR1EN = 25
