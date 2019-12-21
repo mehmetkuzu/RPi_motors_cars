@@ -95,14 +95,14 @@ class motors:
             return (self.currentGear == 1)
             
     def setSpeedSensor(self,spS):
-		self.spS = spS
-		
-	def startSpeedSensor(self):
-		if self.spS:
-			self.spS.turnOnDetector()
-	def getSensorSpeed(self):
-		if self.spS:
-			self.spS.calculate_speed()
-	def getSensorSpeedInWindow(self):
-		if self.spS:
-			self.spS.calculate_speed_inwindow()
+        self.spS = spS
+                
+    def startSpeedSensor(self):
+        if self.spS:
+                self.spS.turnOnDetector()
+    def getSensorSpeed(self):
+        if self.spS:
+                self.spS.calculate_speed()
+    def getSensorSpeedInWindow(self):
+        if self.spS:
+                self.spS.calculate_speed_inwindow()

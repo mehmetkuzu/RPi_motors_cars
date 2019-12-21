@@ -71,8 +71,9 @@ def getStandartCar():
     motorRight = motors.fromPinDefs(pinsRight, theSpeeds)
     motorLeft = motors.fromPinDefs(pinsLeft, theSpeeds)
     
-    speedSonsorRight = speedSensor(25,1,20,5)
+    speedSensorRight = speedSensor(25,1,20,5)
     motorRight.setSpeedSensor(speedSensorRight)
+    motorRight.spS.turnOnDetector()
     
     #speedSonsorLeft = speedSensor(25,1,20,5)
     #motorLeft.setSpeedSensor(speedSensorLeft)

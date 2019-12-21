@@ -36,44 +36,47 @@ pulse = 0
 start_timer = time.time()
 
 class speedSensor:
-        def __init__(self, speedPin, ,r_cm,holeCount, speedWindow):
+        def __init__(self, speedPin, r_cm,holeCount, speedWindow):
             self.speedPin = speedPin
             self.speedWindow = speedWindow
             self.circ_cm = (2*math.pi)*r_cm          # calculate wheel circumference in CM
             self.holeCount = holeCount
+            self.elapse = 0
             self.speedSensorSet()
             
         def speedSensorSet(self):
-			GPIO.setup(self.speedPin,GPIO.IN,GPIO.PUD_UP)
-		def turnOnDetector(self):
-			GPIO.remove_event_detect(self.speedPin)
-			self.pulse = 0
-			self.windowTimers = deque()
-			self.start_timer = time.time()
-			GPIO.add_event_detect(self.speedPin, GPIO.FALLING, callback = calculate_elapse, bouncetime = 20)
-		def turnOffDetector(self):
-			GPIO.remove_event_detect(self.speedPin)
-			self.pulse = 0
-			self.windowTimers.clear()
-		def calculate_elapse(channel):              # callback function
-			self.pulse += 1     
-			self.elapse = time.time() - self.start_timer      # elapse for every 1 complete rotation made!
-			if len(self.windowTimers) == self.speedWindow:
-				self.windowTimers.popleft()
-			self.windowTimers.append(time.time())
-			self.start_timer = time.time()               # let current time equals to start_timer
-		def calculate_speed(self):
-			if self.elapse != 0:
-				rpm = ((1/self.elapse) * 60))/self.holeCount
-			return (self.circ_cm * rpm)/100000 # convert cm to km
-		def calculate_speed_inwindow(self):
-			timerCount = len(self.windowTimers)
-			if timerCount < 2:
-				return(self.calculate(r_cm))
-			firstTime = self.windowTimers.popleft()
-			lastTime = self.windowTimers.pop()
-			self.windowTimers.appendleft(firstTime)
-			self.windowTimers.append(lastTime)
-			secondsPassed = lastTime - firstTime
-			rpm = (((timerCount-1)/secondsPassed)) * 60)/self.holeCount
-			return (self.circ_cm * rpm)/100000 # convert cm to km
+            GPIO.setup(self.speedPin,GPIO.IN,GPIO.PUD_UP)
+        def turnOnDetector(self):
+            GPIO.remove_event_detect(self.speedPin)
+            self.pulse = 0
+            self.windowTimers = deque()
+            self.start_timer = time.time()
+            GPIO.add_event_detect(self.speedPin, GPIO.FALLING, callback = self.calculate_elapse, bouncetime = 20)
+        def turnOffDetector(self):
+            GPIO.remove_event_detect(self.speedPin)
+            self.pulse = 0
+            self.windowTimers.clear()
+        def calculate_elapse(self,channel):              # callback function
+            self.pulse += 1     
+            self.elapse = time.time() - self.start_timer      # elapse for every 1 complete rotation made!
+            if len(self.windowTimers) == self.speedWindow:
+                self.windowTimers.popleft()
+            self.windowTimers.append(time.time())
+            self.start_timer = time.time()               # let current time equals to start_timer
+        def calculate_speed(self):
+            if self.elapse != 0:
+                rpm = ((1/self.elapse) * 60)/self.holeCount
+            else:
+                return(0)
+            return (self.circ_cm * rpm)/100000 # convert cm to km
+        def calculate_speed_inwindow(self):
+            timerCount = len(self.windowTimers)
+            if timerCount < 2:
+                return(self.calculate_speed())
+            firstTime = self.windowTimers.popleft()
+            lastTime = self.windowTimers.pop()
+            self.windowTimers.appendleft(firstTime)
+            self.windowTimers.append(lastTime)
+            secondsPassed = lastTime - firstTime
+            rpm = (((timerCount-1)/secondsPassed) * 60)/self.holeCount
+            return (self.circ_cm * rpm)/100000 # convert cm to km

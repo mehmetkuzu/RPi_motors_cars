@@ -85,9 +85,9 @@ class CarCommanderRequestHandler(StreamRequestHandler):
                 elif a == "?":
                     if myCar.motorRight.spS:
                         print (myCar.motorRight.spS.calculate_speed())
-                        print (myCar.motorRight.spS.calculate_speed_inwindow()
+                        print (myCar.motorRight.spS.calculate_speed_inwindow())
                 else:
-                  pass
+                    pass
             else:
                 pass
                       
