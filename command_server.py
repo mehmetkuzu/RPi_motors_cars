@@ -166,7 +166,7 @@ class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
 def runTheServer(): 
     GPIO.setmode(GPIO.BCM)
     # Port 0 means to select an arbitrary unused port
-    HOST, PORT = "192.168.0.105", 1700
+    HOST, PORT = "192.168.0.108", 1700
     CarCommanderRequestHandler.DefineTheCar()
     CarCommanderRequestHandler.DefineTheLaser()
     CarCommanderRequestHandler.DefineTheBuzzer()
