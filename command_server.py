@@ -43,63 +43,53 @@ class CarCommanderRequestHandler(StreamRequestHandler):
         global myBuzzer
         global myRGBLighter
         global myDistanceChecker
-        
+        commandBuffer = ""
+        commandEntered = False
         a = "r"
-        while a != "q" and a!= "k":
+        exitCommandLoop = False
+        while not exitCommandLoop:
             a = self.request.recv(1)
-            print(a)
+
             if a:
                 try:
-                    a = a.strip().decode("ascii")
+                    if a != b'\r' and a != b'\n':
+                        a = a.strip().decode("ascii")
+                        print(a)
                 except:
-                    a = " "
+                    a = ""
+                if a == b'\n':
+                    commandEntered = True
+                elif a == b'\r':
+                    pass
+                else:
+                    commandBuffer += a
                     
-                if a == "f":
-                    myCar.forward()
-                elif a == "b":
-                    myCar.backward()
-                elif a == "r":
-                    myCar.turnRight()
-                elif a == "l":
-                    myCar.turnLeft()
-                elif a == "+":
-                    myCar.gearUp(1)
-                elif a== "-":
-                    myCar.gearDown(1)
-                elif a == "s":
-                    myCar.stop()
-                elif a == "t":
-                    myLaser.turnOff()
-                elif a == "T":
-                    myLaser.turnOn()
-                elif a == "/":
-                    myBuzzer.turnOff()
-                elif a == "*":
-                    myBuzzer.turnOn()
-                elif a == ".":
-                    myRGBLighter.doTheShowOnThread()                
-                elif a == "c":
-                    myDistanceChecker.doTheCheckOnThread()
-                elif a == "C":
-                    myDistanceChecker.stopTheCheckThread()
-                elif a == "?":
-                    if myCar.motorRight.spS:
-                        print (myCar.motorRight.spS.calculate_speed())
-                        print (myCar.motorRight.spS.calculate_speed_inwindow())
+                if commandEntered:
+                    if commandBuffer == "FORWARD":
+                        myCar.forward()
+                        commandEntered = False
+                    elif commandBuffer == "BACKWARD":
+                        myCar.backward()
+                        commandEntered = False
+                    elif commandBuffer == "STOP":
+                        myCar.stop()
+                        commandEntered = False
+                    elif commandBuffer == "KILL":
+                        myCar.stop()
+                        self.connection.close()
+                        def kill_me_please(server):
+                            server.shutdown()
+                        _thread.start_new_thread(kill_me_please, (self.server,))
+                        commandEntered = False
+                        exitCommandLoop = True
+                    else:
+                        commandEntered = False
+                    commandBuffer = ""
                 else:
                     pass
             else:
                 pass
                       
-
-
-        if a=="k":
-            myCar.stop()
-
-            self.connection.close()
-            def kill_me_please(server):
-                server.shutdown()
-            _thread.start_new_thread(kill_me_please, (self.server,))
         
     # def log(self,message):
         # print(message)
@@ -173,16 +163,21 @@ def runTheServer():
     CarCommanderRequestHandler.DefineTheRGBLighter()
     CarCommanderRequestHandler.DefineTheDistanceChecker()
     #server = TCPServer((HOST, PORT), ThreadedTCPRequestHandlerSample)
-    server = TCPServer((HOST, PORT), CarCommanderRequestHandler)
+    server = None
     try:
+        server = TCPServer((HOST, PORT), CarCommanderRequestHandler)
         socketserver.TCPServer.allow_reuse_address = True
         server.allow_reuse_address = True
-        server.timeout = 20
+        server.timeout = 5
         server.serve_forever()
     except KeyboardInterrupt:
         server.shutdown()
+    except Exception:
+        if server:
+            server.shutdown()
     GPIO.cleanup()
-    server.server_close()
+    if server:
+        server.server_close()
     sys.exit(0)
 if __name__ == "__main__":
     runTheServer()

@@ -67,7 +67,7 @@ def getStandartCar():
     pinsLeft = motor_pins(17,18,23)
     pinsRight = motor_pins(22,27,24)
 
-    theSpeeds = motor_speeds(30,4,1)
+    theSpeeds = motor_speeds(50,4,1)
     motorRight = motors.fromPinDefs(pinsRight, theSpeeds)
     motorLeft = motors.fromPinDefs(pinsLeft, theSpeeds)
     
@@ -95,7 +95,7 @@ def carTest():
 
     GPIO.setmode(GPIO.BCM)
 
-    theSpeeds = motor_speeds(50,4,1)
+    theSpeeds = motor_speeds(70,4,1)
     motorRight = motors.fromPinDefs(pinsRight, theSpeeds)
     motorLeft = motors.fromPinDefs(pinsLeft, theSpeeds)
 
