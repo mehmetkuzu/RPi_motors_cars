@@ -123,36 +123,6 @@ class CarCommanderRequestHandler(StreamRequestHandler):
         global myCar
         myDistanceChecker = getStandartDistanceChecker(myCar)
         
-class ThreadedTCPRequestHandlerSample(BaseRequestHandler):
-    # def setup(self):
-        # print("[+] New server socket thread started for " + str(self.client_address[1]))
-
-    def handle(self):
-        self.data = self.rfile.readline().strip().decode()
-        self.lastResult = sampleCommandProcessor.processCommand(self.data)
-        self.wfile.write(self.lastResult.encode())
-        self.rfile.flush()
-        self.wfile.flush()
-        
-        if self.lastResult == "END":
-            self.connection.close()
-            def kill_me_please(server):
-                server.shutdown()
-            _thread.start_new_thread(kill_me_please, (self.server,))
-        
-    # def log(self,message):
-        # print(message)
-                
-    # def logTimed(self,message):
-        # now = datetime.now()
-        # current_time = now.strftime("%H:%M:%S")
-        # print(current_time + " | " + message)
-
-
-class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
-    pass
-    
-
 def runTheServer(): 
     GPIO.setmode(GPIO.BCM)
     # Port 0 means to select an arbitrary unused port
