@@ -24,6 +24,7 @@
 import threading
 import _thread
 from socketserver import StreamRequestHandler
+import socket
 
 class CommandReturns:
     def __init__(self, statusOK, statusEND, returnMessage):
@@ -36,22 +37,36 @@ class GenericCommanderFunctionsClass:
     def processCommand(self, commandString):
         if commandString == "KILL":
             return CommandReturns(True,True, "Shutting down server")
-        elif commandString != "HALO":
-            return CommandReturns(False,False, "INVALID COMMAND Boomer")
+        elif commandString == "HALO":
+            return CommandReturns(True,False, "Halo dayı halo")
+        elif commandString == "PING":            
+            return CommandReturns(True,False, "Pong")
         else:
             print (commandString)
-            return CommandReturns(True,False, "OK Boomer")
+            return CommandReturns(False,False, "Invalid Command, boomer")
 
 class CommanderRequestHandler(StreamRequestHandler):
-    def handle(self):        
+    def handle(self):       
+        print("CONNECTION: " + self.connection.getpeername()[0])
+        self.connection.settimeout(5)
         commandBuffer = ""
         commandEntered = False
         a = "r"
         exitCommandLoop = False
         while not exitCommandLoop:
-            a = self.request.recv(1)
+            if self.connection._closed:
+                print("Connection closed")
+            if self.server.doTheShutting:
+                print ("someone closed the server")
+                self.connection.close()
+                break
+            try:
+                a = self.request.recv(1)
+            except socket.timeout:
+                continue
 
             if a:
+                print(a)
                 try:
                     if a != b'\r' and a != b'\n':
                         a = a.strip().decode("ascii")
@@ -72,6 +87,7 @@ class CommanderRequestHandler(StreamRequestHandler):
                         self.request.sendall(retMessage)
                         self.connection.close()
                         def kill_me_please(server):
+                            server.doTheShutting = True
                             server.shutdown()
                         _thread.start_new_thread(kill_me_please, (self.server,))
                         commandEntered = False

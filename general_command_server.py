@@ -22,7 +22,7 @@
 #  
 #  
 import sys
-from socketserver import TCPServer
+from socketserver import ThreadingTCPServer
 from commander_request_handler import CommanderRequestHandler
 from commander_request_handler import GenericCommanderFunctionsClass
 class GeneralCommandServer:
@@ -31,15 +31,16 @@ class GeneralCommandServer:
 
     def runTheServer(self): 
         # Port 0 means to select an arbitrary unused port
-        HOST, PORT = "localhost", 1700
+        HOST, PORT = "172.16.40.1", 1700
         #server = TCPServer((HOST, PORT), ThreadedTCPRequestHandlerSample)
         server = None
         try:
-            server = TCPServer((HOST, PORT), CommanderRequestHandler)
+            server = ThreadingTCPServer((HOST, PORT), CommanderRequestHandler)
             #socketserver.TCPServer.allow_reuse_address = True
             server.allow_reuse_address = True
             server.timeout = 5
             server.commanderFunctions = self.commanderFunctions
+            server.doTheShutting = False
             server.serve_forever()
         except KeyboardInterrupt:
             pass
