@@ -26,17 +26,17 @@ from socketserver import ThreadingTCPServer
 from commander_request_handler import CommanderRequestHandler
 from commander_request_handler import GenericCommanderFunctionsClass
 class GeneralCommandServer:
-    def __init__(self, commanderFunctions):
+    def __init__(self, commanderFunctions, serverHost, serverPort):
         self.commanderFunctions = commanderFunctions
+        self.serverHost = serverHost
+        self.serverPort = serverPort
 
     def runTheServer(self): 
         # Port 0 means to select an arbitrary unused port
-        HOST, PORT = "172.16.40.1", 1700
-        #server = TCPServer((HOST, PORT), ThreadedTCPRequestHandlerSample)
+        HOST, PORT = self.serverHost, self.serverPort
         server = None
         try:
             server = ThreadingTCPServer((HOST, PORT), CommanderRequestHandler)
-            #socketserver.TCPServer.allow_reuse_address = True
             server.allow_reuse_address = True
             server.timeout = 5
             server.commanderFunctions = self.commanderFunctions
@@ -52,7 +52,7 @@ class GeneralCommandServer:
             server.server_close()
 
 if __name__ == "__main__":
-    testServer = GeneralCommandServer(GenericCommanderFunctionsClass())
+    testServer = GeneralCommandServer(GenericCommanderFunctionsClass(), "192.168.0.108", 1700)
     testServer.runTheServer()
     sys.exit(0)
     runTheServer()

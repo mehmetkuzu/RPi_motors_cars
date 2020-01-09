@@ -69,7 +69,7 @@ class CommanderRequestHandler(StreamRequestHandler):
                 print(a)
                 try:
                     if a != b'\r' and a != b'\n':
-                        a = a.strip().decode("ascii")
+                        a = a.decode("ascii")
                         print(a)
                 except:
                     a = ""
@@ -81,6 +81,7 @@ class CommanderRequestHandler(StreamRequestHandler):
                     commandBuffer += a
                     
                 if commandEntered:
+                    print(commandBuffer)
                     returning = self.server.commanderFunctions.processCommand(commandBuffer)
                     retMessage = (returning.returnMessage + "\n").encode('utf-8')
                     if returning.statusEND:

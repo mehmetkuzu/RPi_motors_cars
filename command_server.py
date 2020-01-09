@@ -9,6 +9,7 @@ from time import sleep
 from socketserver import StreamRequestHandler
 from socketserver import BaseRequestHandler
 from socketserver import TCPServer
+from socketserver import ThreadingTCPServer
 from datetime import datetime
 from motors_cars import carsWith2Motor
 from motors_cars import getStandartCar
@@ -135,7 +136,7 @@ def runTheServer():
     #server = TCPServer((HOST, PORT), ThreadedTCPRequestHandlerSample)
     server = None
     try:
-        server = TCPServer((HOST, PORT), CarCommanderRequestHandler)
+        server = ThreadingTCPServer((HOST, PORT), CarCommanderRequestHandler)
         socketserver.TCPServer.allow_reuse_address = True
         server.allow_reuse_address = True
         server.timeout = 5

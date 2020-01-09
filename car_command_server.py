@@ -22,6 +22,7 @@ from distanceCheck import distanceCheck
 from distanceCheck import getStandartDistanceChecker
 
 from general_command_server import GeneralCommandServer
+from commander_request_handler import CommandReturns
 
 import RPi.GPIO as GPIO
 class CarCommanderFunctionsClass:
@@ -31,6 +32,7 @@ class CarCommanderFunctionsClass:
         global myBuzzer
         global myRGBLighter
         global myDistanceChecker
+        commandString = commandString.upper()
         if commandString == "FORWARD":
             myCar.forward()
             return CommandReturns(True,False, "GOING FORWARD")
@@ -44,66 +46,62 @@ class CarCommanderFunctionsClass:
             myCar.stop()
             return CommandReturns(True,True, "Shutting down server")
         else:
-			return CommandReturns(False, False, "INVALID COMMAND OR COMMAND FORMAT")
-			
-class CarCommandServer:
-    def __init__(self, commanderFunctions):
-        self.commanderFunctions = commanderFunctions
+            commandData = commandString.split()
+            if len(commandData) < 2:
+                return CommandReturns(False, False, "INVALID COMMAND OR COMMAND FORMAT - 1")
+            else:
+                mainCommand = commandData[0]
+                commandParam = commandData[1]
+                if mainCommand == "SPEED":
+                    try:
+                        speed = int(commandParam)
+                    except ValueError:
+                        return CommandReturns(False, False, "INVALID PARAMETER FOR SPEED")
+                    if (speed < 0) or (100 < speed):
+                        return CommandReturns(False, False, "INVALID PARAMETER FOR SPEED")
+                    else:
+                        myCar.setSpeed(speed)
+                        return CommandReturns(True,False, "Changing Speed - " + str(speed))
+                else:
+                    return CommandReturns(False, False, "INVALID COMMAND")
 
-    def runTheServer(self): 
-        # Port 0 means to select an arbitrary unused port
-        HOST, PORT = "localhost", 1700
-        #server = TCPServer((HOST, PORT), ThreadedTCPRequestHandlerSample)
-        server = None
-        try:
-            server = TCPServer((HOST, PORT), CommanderRequestHandler)
-            #socketserver.TCPServer.allow_reuse_address = True
-            server.allow_reuse_address = True
-            server.timeout = 5
-            server.commanderFunctions = self.commanderFunctions
-            server.serve_forever()
-        except KeyboardInterrupt:
-            pass
-        # except Exception:
-            # if server:
-                # server.shutdown()
-        if server:
-            server.shutdown()			
-    
-    def DefineTheCar():
-        global myCar
-        myCar = getStandartCar()
-    
-    def DefineTheLaser():
-        global myLaser
-        myLaser = getStandartLaser()
-        
-    def DefineTheBuzzer():
-        global myBuzzer
-        myBuzzer = getStandartBuzzer()
 
-    def DefineTheBuzzer():
-        global myBuzzer
-        myBuzzer = getStandartBuzzer()
-        
-    def DefineTheRGBLighter():
-        global myRGBLighter
-        myRGBLighter = getStandartrgblighter()
-        
-    def DefineTheDistanceChecker():
-        global myDistanceChecker
-        global myCar
-        myDistanceChecker = getStandartDistanceChecker(myCar)
+                
+            
+def DefineTheCar():
+    global myCar
+    myCar = getStandartCar()
+
+def DefineTheLaser():
+    global myLaser
+    myLaser = getStandartLaser()
+    
+def DefineTheBuzzer():
+    global myBuzzer
+    myBuzzer = getStandartBuzzer()
+
+def DefineTheBuzzer():
+    global myBuzzer
+    myBuzzer = getStandartBuzzer()
+    
+def DefineTheRGBLighter():
+    global myRGBLighter
+    myRGBLighter = getStandartrgblighter()
+    
+def DefineTheDistanceChecker():
+    global myDistanceChecker
+    global myCar
+    myDistanceChecker = getStandartDistanceChecker(myCar)
         
 def runCar(): 
     GPIO.setmode(GPIO.BCM)
-    CarCommandServer.DefineTheCar()
-    CarCommandServer.DefineTheLaser()
-    CarCommandServer.DefineTheBuzzer()
-    CarCommandServer.DefineTheRGBLighter()
-    CarCommandServer.DefineTheDistanceChecker()
+    DefineTheCar()
+    DefineTheLaser()
+    DefineTheBuzzer()
+    DefineTheRGBLighter()
+    DefineTheDistanceChecker()
     commanderFunctions = CarCommanderFunctionsClass()
-    myServer = CarCommandServer(commanderFunctions)
+    myServer = GeneralCommandServer(commanderFunctions, "192.168.0.108", 1700)
     myServer.runTheServer()
     GPIO.cleanup()
     sys.exit(0)

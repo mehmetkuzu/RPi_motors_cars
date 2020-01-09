@@ -51,7 +51,6 @@ class carsWith2Motor:
         self.motorRight.gearDown(down)
         self.motorLeft.gearDown(down)
         
-
     def forward(self):
         self.changeGear(self.gear)
         self.motorRight.forward()
@@ -61,7 +60,11 @@ class carsWith2Motor:
         self.changeGear(self.gear)
         self.motorRight.backward()
         self.motorLeft.backward()
-        
+
+    def setSpeed(self,speed):
+        breakpoint()
+        self.motorRight.setSpeed(speed)        
+        self.motorLeft.setSpeed(speed)
 
 def getStandartCar():
     pinsLeft = motor_pins(17,18,23)

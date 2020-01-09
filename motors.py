@@ -37,6 +37,7 @@ class motors:
         self.currentGear = 1
         self.direction = 1
         self.stopped = True
+        self.speed = speedDef.lowLimitToRun
         
     @classmethod
     def fromPinDefs (self, pins:motor_pins, speedDef:motor_speeds):
@@ -81,6 +82,12 @@ class motors:
         else:
             self.currentGear = gear
         self.p.ChangeDutyCycle(self.speedDef.gearSpeed(self.currentGear))
+    
+    def setSpeed(self,speed):
+        if self.stopped:
+            return
+        self.p.ChangeDutyCycle(speed)
+        self.speed = speed
     
     def gearUp(self,up):
             self.changeGear(self.currentGear+up)
