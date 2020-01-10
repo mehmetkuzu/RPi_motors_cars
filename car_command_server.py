@@ -66,7 +66,7 @@ class CarCommanderFunctionsClass:
                         return CommandReturns(True,False, "Changing Speed - " + str(speed))
                 elif mainCommand == "CANNON":
                     if commandParam in {"UP", "DOWN", "LEFT", "RIGHT", "SELECT"} :
-                        if len(commanData) < 3:
+                        if len(commandData) < 3:
                             myCannon.sendCommand(commandParam + "\n")
                             return CommandReturns(True, False, "CANNON " + commandParam)
                         else:
