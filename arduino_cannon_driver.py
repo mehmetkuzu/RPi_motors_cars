@@ -27,7 +27,8 @@ def testUSB():
     port = serial.Serial("/dev/ttyUSB0", baudrate=9600, timeout=3.0)
     i = 0
     while i< 8:
-        port.write("UP\n".encode())
+        stratum = "UP " + str(i*10) + "\n"
+        port.write(stratum.encode())
         i += 1
         #rcv = port.read(10)
         #print (rcv)
