@@ -21,6 +21,7 @@ from rgblighter import getStandartrgblighter
 from distanceCheck import distanceCheck
 from distanceCheck import getStandartDistanceChecker
 from arduino_cannon_driver import CannonDriver
+from arduino_cannon_driver import getStandartCannonDriver
 
 from general_command_server import GeneralCommandServer
 from commander_request_handler import CommandReturns
