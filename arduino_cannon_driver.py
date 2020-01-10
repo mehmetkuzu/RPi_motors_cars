@@ -39,6 +39,7 @@ class CannonDriver:
 def getStandartCannonDriver():
 	myCannon = CannonDriver("/dev/ttyUSB0", 9600)
 	myCannon.openPort()
+	return myCannon
 
 def testUSB():
     port = serial.Serial("/dev/ttyUSB0", baudrate=9600, timeout=3.0)
