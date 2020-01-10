@@ -20,6 +20,7 @@ from rgblighter import rgblighter
 from rgblighter import getStandartrgblighter
 from distanceCheck import distanceCheck
 from distanceCheck import getStandartDistanceChecker
+from arduino_cannon_driver import CannonDriver
 
 from general_command_server import GeneralCommandServer
 from commander_request_handler import CommandReturns
@@ -32,6 +33,7 @@ class CarCommanderFunctionsClass:
         global myBuzzer
         global myRGBLighter
         global myDistanceChecker
+        global myCannon
         commandString = commandString.upper()
         if commandString == "FORWARD":
             myCar.forward()
@@ -62,11 +64,16 @@ class CarCommanderFunctionsClass:
                     else:
                         myCar.setSpeed(speed)
                         return CommandReturns(True,False, "Changing Speed - " + str(speed))
+                elif mainCommand == "CANNON":
+                    if commandParam in {"UP", "DOWN", "LEFT", "RIGHT", "SELECT") :
+                        if len(commanData) < 3:
+                            myCannon.sendCommand(commandParam + "\n")
+                            return CommandReturns(True, False, "CANNON " + commandParam)
+                        else:
+                            myCannon.sendCommand(commandParam +" " + commandData[2]+ "\n")
+                            return CommandReturns(True, False, "CANNON " + commandParam + " " + commandData[2])
                 else:
                     return CommandReturns(False, False, "INVALID COMMAND")
-
-
-                
             
 def DefineTheCar():
     global myCar
@@ -92,6 +99,10 @@ def DefineTheDistanceChecker():
     global myDistanceChecker
     global myCar
     myDistanceChecker = getStandartDistanceChecker(myCar)
+    
+def defineTheCannonDriver():
+    global myCannon
+    myCannon = getStandartCannonDriver()
         
 def runCar(): 
     GPIO.setmode(GPIO.BCM)
