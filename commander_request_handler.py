@@ -35,6 +35,7 @@ class CommandReturns:
 class GenericCommanderFunctionsClass:
         
     def processCommand(self, commandString):
+        commandString = commandString.upper()
         if commandString == "KILL":
             return CommandReturns(True,True, "Shutting down server")
         elif commandString == "HALO":

@@ -52,7 +52,10 @@ class GeneralCommandServer:
             server.server_close()
 
 if __name__ == "__main__":
-    testServer = GeneralCommandServer(GenericCommanderFunctionsClass(), "192.168.0.108", 1700)
+    host = "0.0.0.0"
+    port = 1700
+
+    testServer = GeneralCommandServer(GenericCommanderFunctionsClass(), host, port)
     testServer.runTheServer()
     sys.exit(0)
     runTheServer()

@@ -10,8 +10,8 @@ from socketserver import StreamRequestHandler
 from socketserver import BaseRequestHandler
 from socketserver import TCPServer
 from datetime import datetime
-from motors_cars import carsWith2Motor
-from motors_cars import getStandartCar
+from motors_cars2 import carsWith2Motor2
+from motors_cars2 import getStandartCar2
 from laser import laser
 from laser import getStandartLaser
 from buzzer import buzzer
@@ -70,7 +70,7 @@ class CarCommanderFunctionsClass:
             
 def DefineTheCar():
     global myCar
-    myCar = getStandartCar()
+    myCar = getStandartCar2()
 
 def DefineTheLaser():
     global myLaser
@@ -105,5 +105,23 @@ def runCar():
     myServer.runTheServer()
     GPIO.cleanup()
     sys.exit(0)
+
+def runCarServer(): 
+    GPIO.setmode(GPIO.BCM)
+    DefineTheCar()
+    DefineTheLaser()
+    DefineTheBuzzer()
+    DefineTheRGBLighter()
+    DefineTheDistanceChecker()
+    commanderFunctions = CarCommanderFunctionsClass()
+    
+    host = "0.0.0.0"
+    port = 1700
+    
+    myServer = GeneralCommandServer(commanderFunctions, host, port)
+    myServer.runTheServer()
+    GPIO.cleanup()
+    sys.exit(0)
+
 if __name__ == "__main__":
-    runCar()
+    runCarServer()
