@@ -84,8 +84,8 @@ def getStandartCar2():
     # MOTOR2IN2 = 27
     # MOTOR2EN = 24
 
-    motorRight = motors.fromPinDefs(pinsRight)
-    motorLeft = motors.fromPinDefs(pinsLeft)
+    motorRight = motors2.fromPinDefs(pinsRight)
+    motorLeft = motors2.fromPinDefs(pinsLeft)
 # Sadece sağ motor için hız sensörü denemede    
     speedSensorRight = speedSensor(25,1,20,5)
     motorRight.setSpeedSensor(speedSensorRight)
