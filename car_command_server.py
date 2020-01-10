@@ -100,7 +100,7 @@ def DefineTheDistanceChecker():
     global myCar
     myDistanceChecker = getStandartDistanceChecker(myCar)
     
-def defineTheCannonDriver():
+def DefineTheCannonDriver():
     global myCannon
     myCannon = getStandartCannonDriver()
         
@@ -124,6 +124,7 @@ def runCarServer():
     DefineTheBuzzer()
     DefineTheRGBLighter()
     DefineTheDistanceChecker()
+    DefineTheCannonDriver()
     commanderFunctions = CarCommanderFunctionsClass()
     
     host = "0.0.0.0"
