@@ -156,6 +156,7 @@ class carsWith4Motor:
         self.motorLeft.setSpeed(speed)
         self.motorRight2.setSpeed(speed)        
         self.motorLeft2.setSpeed(speed)
+        self.speed = speed
 
     
     def setAngle(self, percentage):
