@@ -46,7 +46,6 @@ class CarCommanderFunctionsClass:
         elif commandString == "STOP":
             myCar.stop()
             return CommandReturns(True,False, "STOPPED")
-            
         elif commandString == "KILL":
             myCar.stop()
             return CommandReturns(True,True, "Shutting down server")
@@ -96,6 +95,37 @@ class CarCommanderFunctionsClass:
                         else:
                             myCannon.sendCommand(commandParam +" " + commandData[2]+ "\n")
                             return CommandReturns(True, False, "CANNON " + commandParam + " " + commandData[2])
+                elif mainCommand == "TEST":
+                    if commandParam in {"MOTOR"} :
+                        if len(commandData) < 3:
+                            return CommandReturns(False, False, "MOTOR TO TEST MISSING IN COMMAND")
+                        else:
+                            try:
+                                testMotor = int(commandData[2])
+                        except ValueError:
+                            return CommandReturns(False, False, "MOTOR INDEX MISFORMULATED TRY 1 2 3 4")
+                        if testMotor = 1:
+                            myCar.stop()
+                            myCar.motorRight.forward()
+                            myCar.motorRight.setSpeed(50)
+                            return CommandReturns(True, False, "TEST RUNNING - " + commandParam + " " + commandData[2])
+                        elif testMotor = 2:
+                            myCar.stop()
+                            myCar.motorLeft.forward()
+                            myCar.motorLeft.setSpeed(50)
+                            return CommandReturns(True, False, "TEST RUNNING - " + commandParam + " " + commandData[2])
+                        elif testMotor = 3:
+                            myCar.stop()
+                            myCar.motorRight2.forward()
+                            myCar.motorRight2.setSpeed(50)
+                            return CommandReturns(True, False, "TEST RUNNING - " + commandParam + " " + commandData[2])
+                        elif testMotor = 4:
+                            myCar.stop()
+                            myCar.motorLeft2.forward()
+                            myCar.motorLeft2.setSpeed(50)
+                            return CommandReturns(True, False, "TEST RUNNING - " + commandParam + " " + commandData[2])
+                        else:
+                            return CommandReturns(False, False, "INVALID MOTOR INDEX TRY 1 2 3 4")
                 else:
                     return CommandReturns(False, False, "INVALID COMMAND")
             

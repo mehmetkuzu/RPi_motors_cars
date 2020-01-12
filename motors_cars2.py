@@ -160,7 +160,6 @@ class carsWith4Motor:
 
     
     def setAngle(self, percentage):
-        breakpoint()
         if percentage > 100:
             percentage = 100
             
