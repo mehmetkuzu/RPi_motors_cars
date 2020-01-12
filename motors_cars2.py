@@ -205,8 +205,8 @@ def getStandart4WheelCar2():
     pinsRight = motor_pins(17,18,23)
     pinsLeft = motor_pins(22,27,24)
 
-    pinsRight2 = motor_pins(25,4,8)
-    pinsLeft2 = motor_pins(10,9,11)
+    pinsLeft2 = motor_pins(25,4,8)
+    pinsRight2 = motor_pins(10,9,11)
 
     # MOTOR1IN1 = 17
     # MOTOR1IN2 = 18
