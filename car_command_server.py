@@ -46,6 +46,7 @@ class CarCommanderFunctionsClass:
         elif commandString == "STOP":
             myCar.stop()
             return CommandReturns(True,False, "STOPPED")
+            
         elif commandString == "KILL":
             myCar.stop()
             return CommandReturns(True,True, "Shutting down server")
@@ -66,6 +67,27 @@ class CarCommanderFunctionsClass:
                     else:
                         myCar.setSpeed(speed)
                         return CommandReturns(True,False, "Changing Speed - " + str(speed))
+                elif mainCommand == "LEFT":
+                    try:
+                        angle = int(commandParam)
+                    except ValueError:
+                        return CommandReturns(False, False, "INVALID PARAMETER FOR LEFT TURN")
+                    if (angle < 0) or (angle > 100):
+                        return CommandReturns(False, False, "INVALID NUMBER FOR LEFT TURN")
+                    else:
+                        myCar.setAngle(-angle)
+                        return CommandReturns(True,False, "Changing Direction LEFT- " + str(angle))
+                elif mainCommand == "RIGHT":
+                    try:
+                        angle = int(commandParam)
+                    except ValueError:
+                        return CommandReturns(False, False, "INVALID PARAMETER FOR RIGHT TURN")
+                    if (angle > 0) or (angle < -100):
+                        return CommandReturns(False, False, "INVALID NUMBER FOR RIGHT TURN")
+                    else:
+                        myCar.setAngle(angle)
+                        return CommandReturns(True,False, "Changing Direction RIGHT- " + str(angle))
+                        
                 elif mainCommand == "CANNON":
                     if commandParam in {"UP", "DOWN", "LEFT", "RIGHT", "SELECT"} :
                         if len(commandData) < 3:
