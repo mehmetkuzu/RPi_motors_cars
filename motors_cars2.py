@@ -75,7 +75,7 @@ class carsWith2Motor2:
 
 def getStandartCar2():
     pinsLeft = motor_pins(17,18,23)
-    pinsRight = motor_pins(22,27,25)
+    pinsRight = motor_pins(22,27,4)
 
     # MOTOR1IN1 = 17
     # MOTOR1IN2 = 18
@@ -83,6 +83,10 @@ def getStandartCar2():
     # MOTOR2IN1 = 22
     # MOTOR2IN2 = 27
     # MOTOR2EN = 24
+    
+    # 24 -> P5 (D7)
+    # 25- > p6
+    # 4 -> p7
 
     motorRight = motors2.fromPinDefs(pinsRight)
     motorLeft = motors2.fromPinDefs(pinsLeft)
