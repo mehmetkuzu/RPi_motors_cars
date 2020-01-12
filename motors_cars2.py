@@ -74,8 +74,8 @@ class carsWith2Motor2:
         self.angle = percentage
 
 def getStandartCar2():
-    pinsLeft = motor_pins(17,18,23)
-    pinsRight = motor_pins(22,27,4)
+    pinsLeft = motor_pins(17,18,8)
+    pinsRight = motor_pins(22,27,7)
 
     # MOTOR1IN1 = 17
     # MOTOR1IN2 = 18
@@ -87,6 +87,8 @@ def getStandartCar2():
     # 24 -> P5 (D7)
     # 25- > p6
     # 4 -> p7
+    # 8 -> ceo
+    # 7 -> d11
 
     motorRight = motors2.fromPinDefs(pinsRight)
     motorLeft = motors2.fromPinDefs(pinsLeft)
