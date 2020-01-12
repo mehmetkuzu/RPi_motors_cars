@@ -143,7 +143,7 @@ def runCarServer():
 
 def runCarServerWith4Motors(): 
     GPIO.setmode(GPIO.BCM)
-    DefineTheCar()
+    Define4WheelTheCar()
     DefineTheLaser()
     DefineTheBuzzer()
     DefineTheRGBLighter()
