@@ -24,22 +24,29 @@
 import serial
 import time
 class CannonDriver:
-	def __init__(self, device, baudrate):
-		self.device = device
-		self.baudrate = baudrate
-		self.devReady = False
-	
-	def openPort(self):
-		self.port = serial.Serial(self.device, baudrate=self.baudrate, timeout=3.0)
-		self.devReady = True
-		
-	def sendCommand(self,command):
-		self.port.write(command.encode())
+    def __init__(self, device, baudrate):
+        self.device = device
+        self.baudrate = baudrate
+        self.devReady = False
+    
+    def openPort(self):
+        try:
+            self.port = serial.Serial(self.device, baudrate=self.baudrate, timeout=3.0)
+            self.devReady = True
+        except serial.SerialException as err:
+            print(format(err))
+            self.devReady = False
+        
+    def sendCommand(self,command):
+        if self.devReady:
+            self.port.write(command.encode())
+        else:
+            print("Port Not Open")
 
 def getStandartCannonDriver():
-	myCannon = CannonDriver("/dev/ttyUSB0", 9600)
-	myCannon.openPort()
-	return myCannon
+    myCannon = CannonDriver("/dev/ttyUSB0", 9600)
+    myCannon.openPort()
+    return myCannon
 
 def testUSB():
     port = serial.Serial("/dev/ttyUSB0", baudrate=9600, timeout=3.0)
