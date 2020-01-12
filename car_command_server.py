@@ -82,7 +82,7 @@ class CarCommanderFunctionsClass:
                         angle = int(commandParam)
                     except ValueError:
                         return CommandReturns(False, False, "INVALID PARAMETER FOR RIGHT TURN")
-                    if (angle > 0) or (angle < -100):
+                    if (angle < 0) or (angle > 100):
                         return CommandReturns(False, False, "INVALID NUMBER FOR RIGHT TURN")
                     else:
                         myCar.setAngle(angle)
