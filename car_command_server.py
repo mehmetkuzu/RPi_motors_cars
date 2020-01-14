@@ -49,6 +49,9 @@ class CarCommanderFunctionsClass:
         elif commandString == "KILL":
             myCar.stop()
             return CommandReturns(True,True, "Shutting down server")
+        elif commandString == "QUIT":
+            return CommandReturns(False, False, "Shutting down server")
+            # Disconnect için bir durum eklenmesi lazım.
         else:
             commandData = commandString.split()
             if len(commandData) < 2:
@@ -66,6 +69,7 @@ class CarCommanderFunctionsClass:
                     else:
                         myCar.setSpeed(speed)
                         return CommandReturns(True,False, "Changing Speed - " + str(speed))
+                        
                 elif mainCommand == "LEFT":
                     try:
                         angle = int(commandParam)
@@ -88,7 +92,7 @@ class CarCommanderFunctionsClass:
                         return CommandReturns(True,False, "Changing Direction RIGHT- " + str(angle))
                         
                 elif mainCommand == "CANNON":
-                    if commandParam in {"UP", "DOWN", "LEFT", "RIGHT", "SELECT"} :
+                    if commandParam in {"UP", "DOWN", "LEFT", "RIGHT", "SELECT", "LASER"} :
                         if len(commandData) < 3:
                             myCannon.sendCommand(commandParam + "\n")
                             return CommandReturns(True, False, "CANNON " + commandParam)
