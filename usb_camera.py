@@ -34,7 +34,7 @@ def testCamera():
 		cv2.imshow('SnapshotTest',image)
 		cv2.waitKey(0)
 		cv2.destroyWindow('SnapshotTest')
-		cv2.imwrite('/home/pi/book/output/SnapshotTest.jpg',image)
+		cv2.imwrite('/home/pi/SnapshotTest.jpg',image)
 	cam.release()
 
 def main(args):
